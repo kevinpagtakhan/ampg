@@ -112,7 +112,9 @@
         <label class="form-label" for="event_type">Event Type</label>
         <div class="input-group">
           <input onblur="persist()" class="form-control" id="event_type" type="text" aria-describedby="button-addon2"></input>
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="bi-x-square"></i></button>
+          <button onclick="setField('event_type', '')" class="btn btn-outline-secondary" type="button" id="button-addon2">
+            <i class="bi-x-square"></i>
+          </button>
         </div>
         <span onclick="setField('event_type', '$idenfify')" class="mt-1 badge bg-secondary bg-gradient text-wrap">
           $idenfify
