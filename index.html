@@ -7,14 +7,16 @@
     <script>
       const device_id = Date.now().toString() + Date.now().toString();
       const session_id = Date.now();
+      const DEFAULT_ENDPOINT = 'https://api2.amplitude.com/2/httpapi';
       function send() {
+        const endpoint = document.getElementById('endpoint').value || DEFAULT_ENDPOINT;
         const api_key = document.getElementById('api').value;
         const event_type = document.getElementById('event').value;
         const group_type = document.getElementById('group-type').value;
         const group_type_value = document.getElementById('group-type-value').value;
         const group_property = document.getElementById('group-property').value;
         const group_property_value = document.getElementById('group-property-value').value;
-        fetch('https://api2.amplitude.com/2/httpapi', {
+        fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -45,6 +47,10 @@
   </head>
   <body>
     <div class="container-sm py-3">
+      <div class="pb-3">
+        <label class="form-label" for="endpoint">Endpoint (Optional)</label>
+        <input class="form-control" id="endpoint" type="text" placeholder="https://api2.amplitude.com/2/httpapi"></input>
+      </div>
       <div class="pb-3">
         <label class="form-label" for="api">API KEY</label>
         <input class="form-control" id="api" type="text"></input>
