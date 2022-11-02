@@ -38,6 +38,8 @@
                 : searchParams.set(key, value);
             } else if (value) {
               searchParams.set(key, value);
+            } else {
+              searchParams.delete(key)
             }
           }
           const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
