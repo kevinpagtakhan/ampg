@@ -4,6 +4,12 @@
       ampg
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <style>
+      .badge {
+        cursor: pointer
+      }
+    </style>
     <script>
       const device_id = Date.now().toString() + Date.now().toString();
       const session_id = Date.now();
@@ -77,6 +83,11 @@
           }),
         })
       }
+
+      function setField(key, value) {
+        document.getElementById(key).value = value;
+        persist();
+      }
     </script>
   </head>
   <body>
@@ -84,17 +95,32 @@
       <div class="pb-3">
         <label class="form-label" for="endpoint">Endpoint (Optional)</label>
         <input onblur="persist()" class="form-control" id="endpoint" type="text" placeholder="https://api2.amplitude.com/2/httpapi"></input>
+        <span onclick="setField('endpoint', DEFAULT_ENDPOINT)" class="mt-1 badge bg-secondary bg-gradient text-wrap">
+          prod
+        </span>
+        <span onclick="setField('endpoint', 'https://api.staging.amplitude.com/2/httpapi')" class="mt-1 badge bg-secondary bg-gradient text-wrap">
+          staging
+        </span>
       </div>
       <div class="pb-3">
-        <label class="form-label" for="api_key">API KEY</label>
+        <label class="form-label" for="api_key">API Key</label>
         <input onblur="persist()" class="form-control" id="api_key" type="text"></input>
       </div>
       <div class="pb-3">
         <label class="form-label" for="event_type">Event Type</label>
-        <input onblur="persist()" class="form-control" id="event_type" type="text"></input>
+        <div class="input-group">
+          <input onblur="persist()" class="form-control" id="event_type" type="text" aria-describedby="button-addon2"></input>
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="bi-x-square"></i></button>
+        </div>
+        <span onclick="setField('event_type', '$idenfify')" class="mt-1 badge bg-secondary bg-gradient text-wrap">
+          $idenfify
+        </span>
+        <span onclick="setField('event_type', '$groupIdenfify')" class="mt-1 badge bg-secondary bg-gradient text-wrap">
+          $groupIdenfify
+        </span>
       </div>
       <div class="pb-3">
-        <label class="form-label" for="group_type">Group</label>
+        <label class="form-label" for="group_type">Group (Optional)</label>
         <input onblur="persist()" class="form-control mb-2" id="group_type" type="text" placeholder="Group type"></input>
         <input onblur="persist()" class="form-control" id="group_type_value" type="text" placeholder="Group type value"></input>
       </div>
