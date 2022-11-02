@@ -28,23 +28,26 @@
       }
 
       function persist() {
-        if ('URLSearchParams' in window) {
-          const searchParams = new URLSearchParams(window.location.search)
-          const formValues = getFormValues();
-          for ([key, value] of Object.entries(formValues)) {
-            if (key === 'endpoint') {
-              value === DEFAULT_ENDPOINT
-                ? searchParams.delete(key)
-                : searchParams.set(key, value);
-            } else if (value) {
-              searchParams.set(key, value);
-            } else {
-              searchParams.delete(key)
-            }
+        const formValues = getFormValues();
+        const query = parseQueryParameter();
+
+        for ([key, value] of Object.entries(formValues)) {
+          if (key === 'endpoint') {
+            value === DEFAULT_ENDPOINT
+            ? delete query[key]
+            : query[key] = encodeURIComponent(value);
+          } else if (value) {
+            query[key] = encodeURIComponent(value);
+          } else {
+            delete query[key]
           }
-          const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-          history.pushState(null, '', newRelativePathQuery);
         }
+
+        const queryString = Object.entries(query).map(([key, value]) => key + '=' + value).join('&');
+        const params = queryString.length > 0
+          ? '?' + queryString
+          : '';
+        history.pushState(null, '', window.location.pathname + params);
       }
 
       function send() {
@@ -142,7 +145,7 @@
         if (!url) url = location.search;
         const query = url.substr(1);
         const result = {};
-        query.split('&').forEach(function(part) {
+        query.split('&').filter(Boolean).forEach(function(part) {
           const item = part.split('=');
           result[item[0]] = decodeURIComponent(item[1]);
         });
