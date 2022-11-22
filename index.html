@@ -65,6 +65,7 @@
           group_property_value,
         } = getFormValues();
 
+        document.getElementById('send-loading').className = "spinner-border spinner-border-sm";
         fetch(endpoint, {
           method: 'POST',
           headers: {
@@ -105,6 +106,8 @@
               },
             ],
           }),
+        }).then(() => {
+          document.getElementById('send-loading').className = "";
         })
       }
 
@@ -161,7 +164,10 @@
         <input onblur="persist()" class="form-control" id="group_property_value" type="text" placeholder="Group property value"></input>
       </div>
       <div class="pb-3">
-        <button type="button" class="btn btn-primary" onclick="send()">Send</button>
+        <button type="button" class="btn btn-primary" onclick="send()">
+          <span id="send-loading" class="" role="status" aria-hidden="true"></span>
+          Send
+        </button>
       </div>
     </div>
     <script>
