@@ -20,6 +20,8 @@
           endpoint: document.getElementById('endpoint').value || DEFAULT_ENDPOINT,
           api_key: document.getElementById('api_key').value,
           event_type: document.getElementById('event_type').value,
+          event_property: document.getElementById('event_property').value,
+          event_property_value: document.getElementById('event_property_value').value,
           group_type: document.getElementById('group_type').value,
           group_type_value: document.getElementById('group_type_value').value,
           group_property: document.getElementById('group_property').value,
@@ -55,6 +57,8 @@
           endpoint,
           api_key,
           event_type,
+          event_property,
+          event_property_value,
           group_type,
           group_type_value,
           group_property,
@@ -74,14 +78,31 @@
                 device_id,
                 session_id,
                 event_type,
-                groups: {
-                  [group_type]: group_type_value,
-                },
-                group_properties: {
-                  '$set': {
-                    [group_property]: group_property_value
+                ...(event_property && event_property_value)
+                  ? {
+                    event_properties: {
+                      '$set': {
+                        [event_property]: event_property_value
+                      }
+                    }
                   }
-                },
+                  : undefined,
+                ...(group_type && group_type_value)
+                  ? {
+                    groups: {
+                      [group_type]: group_type_value,
+                    }
+                  }
+                  : undefined,
+                ...(group_property && group_property_value)
+                  ? {
+                    group_properties: {
+                      '$set': {
+                        [group_property]: group_property_value
+                      }
+                    }
+                  }
+                  : undefined,
                 library: 'ampg/0.1',
               },
             ],
@@ -127,12 +148,17 @@
         </span>
       </div>
       <div class="pb-3">
+        <label class="form-label" for="event_property">Event property (Optional)</label>
+        <input onblur="persist()" class="form-control mb-2" id="event_property" type="text" placeholder="Event property"></input>
+        <input onblur="persist()" class="form-control" id="event_property_value" type="text" placeholder="Event property value"></input>
+      </div>
+      <div class="pb-3">
         <label class="form-label" for="group_type">Group (Optional)</label>
         <input onblur="persist()" class="form-control mb-2" id="group_type" type="text" placeholder="Group type"></input>
         <input onblur="persist()" class="form-control" id="group_type_value" type="text" placeholder="Group type value"></input>
       </div>
       <div class="pb-3">
-        <label class="form-label" for="group_property">Group properties (Optional)</label>
+        <label class="form-label" for="group_property">Group property (Optional)</label>
         <input onblur="persist()" class="form-control mb-2" id="group_property" type="text" placeholder="Group property"></input>
         <input onblur="persist()" class="form-control" id="group_property_value" type="text" placeholder="Group property value"></input>
       </div>
@@ -151,14 +177,20 @@
         });
         return result;
       }
-      const query = parseQueryParameter(window.location.search);
-      document.getElementById('endpoint').value = query['endpoint'] || '';
-      document.getElementById('api_key').value = query['api_key'] || '';
-      document.getElementById('event_type').value = query['event_type'] || '';
-      document.getElementById('group_type').value = query['group_type'] || '';
-      document.getElementById('group_type_value').value = query['group_type_value'] || '';
-      document.getElementById('group_property').value = query['group_property'] || '';
-      document.getElementById('group_property_value').value = query['group_property_value'] || '';
+
+      function fill(query) {
+        document.getElementById('endpoint').value = query['endpoint'] || '';
+        document.getElementById('api_key').value = query['api_key'] || '';
+        document.getElementById('event_type').value = query['event_type'] || '';
+        document.getElementById('event_property').value = query['event_property'] || '';
+        document.getElementById('event_property_value').value = query['event_property_value'] || '';
+        document.getElementById('group_type').value = query['group_type'] || '';
+        document.getElementById('group_type_value').value = query['group_type_value'] || '';
+        document.getElementById('group_property').value = query['group_property'] || '';
+        document.getElementById('group_property_value').value = query['group_property_value'] || '';
+      }
+
+      fill(parseQueryParameter(window.location.search));
     </script>
   </body>
 </html>
