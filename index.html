@@ -81,9 +81,7 @@
                 ...(event_property && event_property_value)
                   ? {
                     event_properties: {
-                      '$set': {
-                        [event_property]: event_property_value
-                      }
+                      [event_property]: event_property_value
                     }
                   }
                   : undefined,
